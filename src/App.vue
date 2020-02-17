@@ -18,5 +18,16 @@ export default {
     components: {
         'bus-route': BusRoute
     },
+    data() {
+        return {
+            busRoutes: [
+                {
+                    route: '11',
+                    destination: 'City',
+                    expected: '5mins',
+                }
+            ]
+        }
+    }
 }
 </script>
