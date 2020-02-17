@@ -22,3 +22,31 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+    .flex-line {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        * {
+            padding: 0.25rem;
+        }
+    }
+
+    .route {
+        flex: 1;
+        text-align: center;
+    }
+
+    .destination {
+        flex: 8;
+    }
+
+    .expected {
+        flex: 1;
+        text-align: center;
+    }
+
+</style>
