@@ -1,1 +1,21 @@
+@import 'colours';
 @import 'fonts';
+
+html,
+body {
+    height: 100%;
+    background: $background;
+    color: $text;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1;
+    font-size: 1.5em;
+}
+
+.text-regular {
+    font-family: 'Dot Matrix Regular';
+}
+
+.text-bold {
+    font-family: 'Dot Matrix Bold';
+}
