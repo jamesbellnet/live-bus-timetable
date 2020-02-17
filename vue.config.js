@@ -31,7 +31,7 @@ module.exports = {
         },
 
         manifestOptions: {
-            display: 'standalone',
+            display: 'fullscreen',
             theme_color: '#202020',
             msTileColor: '#202020',
             background_color: '#202020',
