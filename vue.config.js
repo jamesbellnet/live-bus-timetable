@@ -10,6 +10,7 @@ module.exports = {
     },
     pwa: {
         name: 'NCTX Bus Times',
+        short_name: 'NCTX Bus Times',
         themeColor: '#202020',
         msTileColor: '#202020',
         appleMobileWebAppCapable: 'yes',
