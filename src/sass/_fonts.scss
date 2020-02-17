@@ -1,0 +1,21 @@
+@font-face {
+    font-family: 'Dot Matrix Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Dot Matrix Regular'),
+    url('../fonts/Dot-Matrix-Regular.woff') format('woff'),
+    url('../fonts/Dot-Matrix-Regular.eot') format('eot'),
+    url('../fonts/Dot-Matrix-Regular.ttf') format('truetype'),
+    url('../fonts/Dot-Matrix-Regular.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Dot Matrix Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Dot Matrix Bold'),
+    url('../fonts/Dot-Matrix-Bold.woff') format('woff'),
+    url('../fonts/Dot-Matrix-Bold.eot') format('eot'),
+    url('../fonts/Dot-Matrix-Bold.ttf') format('truetype'),
+    url('../fonts/Dot-Matrix-Bold.otf') format('opentype');
+}
