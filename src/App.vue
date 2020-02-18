@@ -5,6 +5,14 @@
         <div v-else-if="error">{{ error }}</div>
 
         <div v-else>
+            <div>
+                <div class="flex-line text-bold">
+                    <div class="route">Rt</div>
+                    <div class="destination">Destination</div>
+                    <div class="expected">Exp.</div>
+                </div>
+            </div>
+
             <bus-line
                 v-for="(bus, index) in upcomingBuses"
                 :key="index"
