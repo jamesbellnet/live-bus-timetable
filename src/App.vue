@@ -1,46 +1,54 @@
 <template>
     <div>
-        <bus-route
-            v-for="(route, index) in busRoutesSliced"
-            :key="index"
-            :route="route._links['transmodel:line'].name"
-            :destination="route.destinationName"
-            :expected="route.displayTime"
-        ></bus-route>
-        <div class="bottom">
-            <div class="flex-line text-bold">
-                <div>{{ busStop }}</div>
-                <div class="text-centre">{{ clock }}</div>
+        <div v-if="loading">Loading timetable...</div>
+
+        <div v-else-if="error">{{ error }}</div>
+
+        <div v-else>
+            <bus-line
+                v-for="(bus, index) in upcomingBuses"
+                :key="index"
+                :route="bus._links['transmodel:line'].name"
+                :destination="bus.destinationName"
+                :expected="bus.displayTime"
+            ></bus-line>
+
+            <div class="info">
+                <div class="flex-line text-bold">
+                    <div>{{ busStop }}</div>
+                    <div class="text-centre">{{ clock }}</div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import BusRoute from '@/components/BusRoute'
-import timetableApi from '@/api'
+import BusLine from '@/components/BusLine'
+import busTimetableApi from '@/api'
 import moment from 'moment'
 
 export default {
     name: 'App',
 
     components: {
-        'bus-route': BusRoute
+        'bus-line': BusLine
     },
 
     data() {
         return {
-            busRoutes: [],
             busStopName: null,
-            numberToShow: 8,
-            updateBusTimes: null,
-            clock: null
+            busesDue: [],
+            show: 8,
+            clock: null,
+            loading: false,
+            error: null
         }
     },
 
     computed: {
-        busRoutesSliced() {
-            return this.busRoutes.slice(0, this.numberToShow)
+        upcomingBuses() {
+            return this.busesDue.slice(0, this.show)
         },
 
         busStop() {
@@ -50,19 +58,34 @@ export default {
 
     methods: {
         fetchBusTimes() {
-            timetableApi.get('/visits')
+            busTimetableApi.get('/visits')
                 .then(res => {
-                    this.busRoutes = res.data._embedded['timetable:visit']
-                    this.busStopName = res.data._links['naptan:stop'].commonName
+                    if(res.data) {
+                        this.busesDue = res.data._embedded['timetable:visit']
+                        this.busStopName = res.data._links['naptan:stop'].commonName
+
+                        if(process.env.NODE_ENV === 'development') {
+                            console.info('[APP]: Bus times refreshed')
+                        }
+                    } else {
+                        this.error = 'Null response received from NCTX API. Please try again.'
+                    }
                 })
-                .catch(error => console.error(error))
-                .finally(() => console.info('[APP]: Bus times refreshed'))
+                .catch(error => {
+                    console.error(error)
+                    this.error = 'An error has occured connecting to the NCTX API. Please try again.'
+                })
+                .finally(() => (this.loading) ? this.loading = false : null)
         }
     },
 
     created() {
+        this.loading = true
         this.fetchBusTimes()
-        this.updateBusTimes = setInterval(() => this.fetchBusTimes(), 60000)
+
+        setInterval(() => {
+            this.fetchBusTimes()
+        }, 60000)
 
         setInterval(() => {
             this.clock = moment().format('HH:mm:ss')
@@ -72,7 +95,7 @@ export default {
 </script>
 
 <style lang="scss">
-    .bottom {
+    .info {
         position: fixed;
         bottom: 0;
         width: 98%;
