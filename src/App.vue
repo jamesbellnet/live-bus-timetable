@@ -9,6 +9,7 @@
         ></bus-route>
         <div class="bottom">
             <div class="flex-line text-bold">
+                <div>{{ busStop }}</div>
                 <div class="text-centre">{{ clock }}</div>
             </div>
         </div>
@@ -30,6 +31,8 @@ export default {
     data() {
         return {
             busRoutes: [],
+            busStopName: null,
+            numberToShow: 8,
             updateBusTimes: null,
             clock: null
         }
@@ -38,6 +41,10 @@ export default {
     computed: {
         busRoutesSliced() {
             return this.busRoutes.slice(0, this.numberToShow)
+        },
+
+        busStop() {
+            return this.busStopName
         }
     },
 
@@ -46,6 +53,7 @@ export default {
             timetableApi.get('/visits')
                 .then(res => {
                     this.busRoutes = res.data._embedded['timetable:visit']
+                    this.busStopName = res.data._links['naptan:stop'].commonName
                 })
                 .catch(error => console.error(error))
                 .finally(() => console.info('[APP]: Bus times refreshed'))
