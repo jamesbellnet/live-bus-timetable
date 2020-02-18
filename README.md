@@ -1,7 +1,7 @@
 # Nottingham Bus Timetable
 
 <p align="center">
-  <img width="500" height="239" src="https://raw.githubusercontent.com/jamesbellnet/live-bus-timetable/master/screenshot.png">
+  <img width="500" height="239" src="https://github.com/jamesbellnet/live-bus-timetable/raw/master/screenshot.png">
 </p>
 
 This is a recreation of a bus timetable built as a PWA. The idea is that you install the app to an old, unused device (phone, iPad etc.) and leave it running somewhere useful where you need to be able to see the bus times for your local stop.
@@ -19,7 +19,7 @@ Once you have the `atcoCode`, follow the steps below and add it to `VUE_APP_BUS_
 ## Project setup
 ```bash
 # clone the repository
-git glone git@github.com:jamesbellnet/live-bus-timetable.git
+git clone git@github.com:jamesbellnet/live-bus-timetable.git
 
 # install dependencies
 cd live-bus-timetable && npm i
