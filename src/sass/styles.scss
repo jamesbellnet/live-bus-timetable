@@ -9,8 +9,9 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1;
-    font-size: 1.5em;
+    font-size: 1.2em;
     font-family: 'Dot Matrix Regular';
+    overflow-y: hidden;
 }
 
 .text-regular {
@@ -19,4 +20,19 @@ body {
 
 .text-bold {
     font-family: 'Dot Matrix Bold';
+}
+
+.text-centre {
+    text-align: center;
+}
+
+.flex-line {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    * {
+        padding: 0.25rem;
+    }
 }

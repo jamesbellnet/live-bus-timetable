@@ -7,12 +7,18 @@
             :destination="route.destinationName"
             :expected="route.displayTime"
         ></bus-route>
+        <div class="bottom">
+            <div class="flex-line text-bold">
+                <div class="text-centre">{{ clock }}</div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import BusRoute from '@/components/BusRoute'
 import timetableApi from '@/api'
+import moment from 'moment'
 
 export default {
     name: 'App',
@@ -24,8 +30,8 @@ export default {
     data() {
         return {
             busRoutes: [],
-            numberToShow: 4,
-            updateBusTimes: null
+            updateBusTimes: null,
+            clock: null
         }
     },
 
@@ -49,6 +55,18 @@ export default {
     created() {
         this.fetchBusTimes()
         this.updateBusTimes = setInterval(() => this.fetchBusTimes(), 60000)
+
+        setInterval(() => {
+            this.clock = moment().format('HH:mm:ss')
+        }, 1000);
     }
 }
 </script>
+
+<style lang="scss">
+    .bottom {
+        position: fixed;
+        bottom: 0;
+        width: 98%;
+    }
+</style>

@@ -1,8 +1,8 @@
 <template>
     <div class="flex-line">
-        <div class="route">{{ route }}</div>
+        <div class="route text-centre">{{ route }}</div>
         <div class="destination">{{ destination }}</div>
-        <div class="expected">{{ expected }}</div>
+        <div class="expected text-centre">{{ expected }}</div>
     </div>
 </template>
 
@@ -24,20 +24,8 @@ export default {
 </script>
 
 <style lang="scss">
-    .flex-line {
-        display: flex;
-        flex-direction: row;
-        align-items: baseline;
-        justify-content: space-between;
-        flex-wrap: nowrap;
-        * {
-            padding: 0.25rem;
-        }
-    }
-
     .route {
         flex: 1;
-        text-align: center;
     }
 
     .destination {
@@ -45,8 +33,6 @@ export default {
     }
 
     .expected {
-        flex: 1;
-        text-align: center;
+        flex: 1.5;
     }
-
 </style>
