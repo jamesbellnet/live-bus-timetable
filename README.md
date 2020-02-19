@@ -1,7 +1,7 @@
 # Nottingham Bus Timetable
 
 <p align="center">
-  <img width="600" height="350" src="https://github.com/jamesbellnet/live-bus-timetable/raw/master/screenshot.png">
+  <img width="600" height="275" src="https://github.com/jamesbellnet/live-bus-timetable/raw/master/screenshot.jpg">
 </p>
 
 This is a recreation of a bus timetable built as a PWA. The idea is that you install the app to an old, unused device (phone, iPad etc.) and leave it running somewhere useful where you need to be able to see the bus times for your local stop.
