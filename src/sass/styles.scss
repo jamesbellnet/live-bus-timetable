@@ -48,3 +48,10 @@ a {
 .expected {
     flex: 1.5;
 }
+
+@media screen and (min-width: 1024px) {
+    html,
+    body {
+        font-size: 1.6em;
+    }
+}

@@ -36,7 +36,7 @@ module.exports = {
             theme_color: '#202020',
             msTileColor: '#202020',
             background_color: '#202020',
-            orientation: 'landscape-primary',
+            orientation: 'landscape',
             icons: [
                 {
                  "src": "\/icons/android-icon-36x36.png",

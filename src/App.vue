@@ -2,7 +2,7 @@
     <div>
         <div v-if="loading">Loading timetable...</div>
 
-        <div v-else-if="error">{{ error }}</div>
+        <div v-else-if="error" v-html="error"></div>
 
         <div v-else>
             <div>
@@ -88,6 +88,10 @@ export default {
     },
 
     created() {
+        if(window.innerHeight > window.innerWidth) {
+            this.error = 'Please use landscape orientation... <a href=".">Refresh</a>'
+        }
+
         this.loading = true
         this.fetchBusTimes()
 
@@ -97,7 +101,7 @@ export default {
 
         setInterval(() => {
             this.clock = moment().format('HH:mm:ss')
-        }, 1000);
+        }, 1000)
     }
 }
 </script>
