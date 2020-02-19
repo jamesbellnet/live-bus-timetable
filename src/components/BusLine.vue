@@ -22,17 +22,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-    .route {
-        flex: 1;
-    }
-
-    .destination {
-        flex: 8;
-    }
-
-    .expected {
-        flex: 1.5;
-    }
-</style>

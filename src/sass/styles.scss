@@ -4,14 +4,18 @@
 html,
 body {
     height: 100%;
+    overflow-y: hidden;
     background: $background;
     color: $text;
+    font-family: 'Dot Matrix Regular';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1;
     font-size: 1.2em;
-    font-family: 'Dot Matrix Regular';
-    overflow-y: hidden;
+}
+
+a {
+    color: $text;
 }
 
 .text-bold {
@@ -31,4 +35,16 @@ body {
     * {
         padding: 0.25rem;
     }
+}
+
+.route {
+    flex: 1;
+}
+
+.destination {
+    flex: 8;
+}
+
+.expected {
+    flex: 1.5;
 }
