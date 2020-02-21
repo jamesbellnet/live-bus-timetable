@@ -1,90 +1,118 @@
 <template>
-    <div>
-        <div v-if="loading">Loading timetable...</div>
+    <div style="height: 100%;">
+        <div v-if="! isFirstVisit">
+            <bus-timetable :selectedStop="stopCode" />
+        </div>
+        <div v-else class="flex-centre">
+            <div v-if="loading">
+                {{ loading }}
+            </div>
 
-        <div v-else-if="error" v-html="error"></div>
+            <div v-else-if="error">
+                <span v-html="error.message"></span> <a v-if="error.type === 'api'" href="javascript:void(0);" @click="error = null">Go back.</a>
+            </div>
 
-        <div v-else>
-            <timetable-header />
-
-            <timetable-journey
-                v-for="(bus, index) in upcomingBuses"
-                :key="index"
-                :route="bus._links['transmodel:line'].name"
-                :destination="bus.destinationName"
-                :expected="bus.displayTime"
-            ></timetable-journey>
-
-            <timetable-footer :stop="busStop"/>
+            <div v-else>
+                <form>
+                    <label for="stopCode">Enter stop code:</label>
+                    <input type="text" placeholder="e.g. 3390ME06" id="stopCode" class="input-text" v-model="stopCode">
+                    <button type="submit" class="button" @click.prevent="selectStop()">Go</button>
+                </form>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import timetableApi from '@/api'
-import TimetableHeader from '@/components/TimetableHeader'
-import TimetableBusJourney from '@/components/TimetableBusJourney'
-import TimetableFooter from '@/components/TimetableFooter'
+import Timetable from '@/components/Timetable/Timetable'
+import cookie from 'cookie'
+import moment from 'moment'
 
 export default {
     name: 'App',
 
     components: {
-        'timetable-header': TimetableHeader,
-        'timetable-journey': TimetableBusJourney,
-        'timetable-footer': TimetableFooter,
+        'bus-timetable': Timetable
     },
 
     data() {
         return {
-            busesDue: [],
-            busStop: null,
-            show: 7,
+            isFirstVisit: true,
+            stopCode: null,
             loading: false,
             error: null
         }
     },
 
-    computed: {
-        upcomingBuses() {
-            return this.busesDue.slice(0, this.show)
-        }
-    },
-
     methods: {
-        fetchBusTimes() {
-            timetableApi.get('/visits')
-                .then(res => {
-                    if(res.data) {
-                        this.busesDue = res.data._embedded['timetable:visit']
-                        this.busStop = res.data._links['naptan:stop'].commonName
+        selectStop() {
+            this.stopCode = this.stopCode.toUpperCase().trim()
+            this.loading = 'Validating stop code...'
 
-                        if(process.env.NODE_ENV === 'development') {
-                            console.info('[APP]: Bus times refreshed')
-                        }
-                    } else {
-                        this.error = 'Null response received from NCTX API. Please try again.'
+            timetableApi.get(`${this.stopCode}`)
+                .then(res => {
+                    if(res.status === 200) {
+                        document.cookie = cookie.serialize('selected_stop_code', this.stopCode, {
+                            expires: moment().add(1, 'y').toDate()
+                        })
+                        this.isFirstVisit = false
                     }
                 })
                 .catch(error => {
                     console.error(error)
-                    this.error = 'An error has occured connecting to the NCTX API. Please try again.'
+                    this.error = {
+                        type: 'api',
+                        message: 'Invalid stop code, please try again.'
+                    }
                 })
-                .finally(() => (this.loading) ? this.loading = false : null)
+                .finally(() => this.loading = false)
         }
     },
 
     created() {
         if(window.innerHeight > window.innerWidth) {
-            return this.error = 'Please use landscape orientation... <a href=".">Refresh</a>'
+            return this.error = {
+                type: 'orientation',
+                message: 'Please use landscape orientation... <a href=".">Refresh</a>'
+            }
         }
 
-        this.loading = true
-        this.fetchBusTimes()
-
-        setInterval(() => {
-            this.fetchBusTimes()
-        }, 60000)
+        if(cookie.parse(document.cookie).selected_stop_code) {
+            this.isFirstVisit = false
+            this.stopCode = cookie.parse(document.cookie).selected_stop_code
+        }
     }
 }
 </script>
+
+<style lang="scss">
+    .flex-centre {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .input-text {
+        background: transparent;
+        color: $text;
+        border: 1px solid $text;
+        border-radius: 3px;
+        padding: 5px;
+        font-size: 0.6em;
+        margin-left: 10px;
+    }
+
+    .button {
+        background: $text;
+        color: $background;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 20px;
+        font-size: 0.6em;
+        margin-left: 10px;
+    }
+</style>
