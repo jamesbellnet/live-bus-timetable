@@ -5,50 +5,41 @@
         <div v-else-if="error" v-html="error"></div>
 
         <div v-else>
-            <div>
-                <div class="flex-line text-bold">
-                    <div class="route text-centre">Rt</div>
-                    <div class="destination">Destination</div>
-                    <div class="expected text-centre">Exp</div>
-                </div>
-            </div>
+            <timetable-header />
 
-            <bus-line
+            <timetable-journey
                 v-for="(bus, index) in upcomingBuses"
                 :key="index"
                 :route="bus._links['transmodel:line'].name"
                 :destination="bus.destinationName"
                 :expected="bus.displayTime"
-            ></bus-line>
+            ></timetable-journey>
 
-            <div class="info">
-                <div class="flex-line text-bold">
-                    <div>{{ busStop }}</div>
-                    <div class="text-centre">{{ clock }}</div>
-                </div>
-            </div>
+            <timetable-footer :stop="busStop"/>
         </div>
     </div>
 </template>
 
 <script>
-import BusLine from '@/components/BusLine'
-import busTimetableApi from '@/api'
-import moment from 'moment'
+import timetableApi from '@/api'
+import TimetableHeader from '@/components/TimetableHeader'
+import TimetableBusJourney from '@/components/TimetableBusJourney'
+import TimetableFooter from '@/components/TimetableFooter'
 
 export default {
     name: 'App',
 
     components: {
-        'bus-line': BusLine
+        'timetable-header': TimetableHeader,
+        'timetable-journey': TimetableBusJourney,
+        'timetable-footer': TimetableFooter,
     },
 
     data() {
         return {
-            busStopName: null,
             busesDue: [],
-            show: 8,
-            clock: null,
+            busStop: null,
+            show: 7,
             loading: false,
             error: null
         }
@@ -57,20 +48,16 @@ export default {
     computed: {
         upcomingBuses() {
             return this.busesDue.slice(0, this.show)
-        },
-
-        busStop() {
-            return this.busStopName
         }
     },
 
     methods: {
         fetchBusTimes() {
-            busTimetableApi.get('/visits')
+            timetableApi.get('/visits')
                 .then(res => {
                     if(res.data) {
                         this.busesDue = res.data._embedded['timetable:visit']
-                        this.busStopName = res.data._links['naptan:stop'].commonName
+                        this.busStop = res.data._links['naptan:stop'].commonName
 
                         if(process.env.NODE_ENV === 'development') {
                             console.info('[APP]: Bus times refreshed')
@@ -89,7 +76,7 @@ export default {
 
     created() {
         if(window.innerHeight > window.innerWidth) {
-            this.error = 'Please use landscape orientation... <a href=".">Refresh</a>'
+            return this.error = 'Please use landscape orientation... <a href=".">Refresh</a>'
         }
 
         this.loading = true
@@ -98,18 +85,6 @@ export default {
         setInterval(() => {
             this.fetchBusTimes()
         }, 60000)
-
-        setInterval(() => {
-            this.clock = moment().format('HH:mm:ss')
-        }, 1000)
     }
 }
 </script>
-
-<style lang="scss">
-    .info {
-        position: fixed;
-        bottom: 0;
-        width: 98%;
-    }
-</style>

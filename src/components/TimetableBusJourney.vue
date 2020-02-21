@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    name: 'BusLine',
+    name: 'TimetableBusJourney',
     props: {
         route: {
             type: String
